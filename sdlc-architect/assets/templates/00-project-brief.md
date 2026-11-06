@@ -55,12 +55,14 @@
 | | | |
 
 - What should happen when an integration is down or slow?
+- Answer explicitly — `none` if there are no third-party systems. This is confirmed before any design starts.
 
 ## 8. Stack
 
-- Preferred stack, if any (Laravel/Livewire, SvelteKit, React, Express, other):
+- Preferred stack, if any (default if unanswered: **Express MVC API + React feature-based client**; alternatives: Laravel/Livewire, SvelteKit, other):
 - Database preference:
-- Hosting or infrastructure constraints (existing VPS, Docker, Nginx, cloud account):
+- How should it run locally? (default: `npm run dev` — nodemon/tsx + Vite; Docker only if you want containers):
+- Hosting or infrastructure constraints (existing VPS, Nginx, cloud account):
 - Anything that must be reused from an existing codebase:
 
 ## 9. Constraints

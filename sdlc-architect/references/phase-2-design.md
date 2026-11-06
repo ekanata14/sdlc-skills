@@ -12,7 +12,7 @@ Required content:
 - A flow table: source → destination → data → trigger → sync/async.
 - Synchronous vs queued: name every operation that leaves the request cycle, and why.
 - State ownership: which component is the source of truth for each entity.
-- Deployment topology: containers, reverse proxy, volumes, how workers are reached, where env/secrets land.
+- Runtime topology: local processes by default — API process, React dev server or built assets, database, reverse proxy only if one exists, and how background work is reached; containers and volumes only when the project is containerised.
 - One short paragraph on what you deliberately did **not** build (no message bus for 200 events/day).
 
 Template:
@@ -20,14 +20,14 @@ Template:
 ```mermaid
 flowchart LR
   subgraph Client
-    B[Browser]
+    B[React client]
   end
   subgraph Edge
     N[Nginx]
   end
   subgraph App
-    A[Laravel app]
-    Q[Queue worker]
+    A[Express API]
+    Q[Background worker]
   end
   subgraph Data
     DB[(Postgres)]

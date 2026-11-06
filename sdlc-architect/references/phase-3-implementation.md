@@ -72,14 +72,15 @@ $slot = Slot::whereKey($slotId)->lockForUpdate()->firstOrFail();
 | Laravel | `app/Actions` for one-off domain operations, `app/Services` for multi-step orchestration, `FormRequest` for validation, `Policy` for authorization, `app/Jobs` for async, migrations in `database/migrations` with timestamped names |
 | Livewire | Component class beside its Blade view in `app/Livewire` + `resources/views/livewire`; authorization at the top of every public action; `#[Locked]` on any property that must not be tampered with; computed properties for derived data |
 | SvelteKit | `+page.server.ts` for authenticated data loading and form actions; `+server.ts` for API endpoints; shared types in `$lib/types`; never return secrets from `load` |
-| React | Feature folder with `api/`, `components/`, `hooks/`; server state in the query layer, UI state local; auth attached in one request wrapper, not per call |
-| Express | `routes/` per resource, `controllers/`, `middleware/` for auth + validation + errors; validation at the router boundary, not deep in handlers |
+| React | Feature-based: `src/features/<feature>/` with that feature's `components/`, `hooks/`, `api/`, `types/`, tests; shared primitives only in `src/components/`; server state in the query layer, UI state local; auth attached in one request wrapper, not per call |
+| Express | MVC: `routes/` → `controllers/` → `services/` → `models/`; `middleware/` for auth + validation + errors; validation at the router boundary, business logic in services, persistence in models — not in routes or controllers |
 | Nginx | Server block per vhost, TLS and proxy headers, explicit `client_max_body_size`, buffering decisions for SSE/streaming |
-| Docker | Multi-stage build, non-root runtime user, healthcheck, secrets via env/secret mount only |
+| Docker | Optional — only when the repo is already containerised or the user asked for containers: multi-stage build, non-root runtime user, healthcheck, secrets via env/secret mount only |
 
 ## Verification
 
 - Run the project's lint, typecheck, and test commands. Report what you ran.
+- Run the project the project's way — local processes by default (`npm run dev` for the API and the client, database native or as one service). Do not introduce Docker or a compose file to make the workflow work; containers only when the repo already uses them or the user asked for them.
 - If a command does not exist in the repo, say so instead of inventing one.
 - If tests were already failing before your change, distinguish pre-existing failures from regressions.
 - Kill any dev server, watcher, or background process you started. Never leave a port occupied.

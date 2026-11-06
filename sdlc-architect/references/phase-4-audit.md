@@ -117,7 +117,9 @@ Severity guide:
 | Static assets cached; HTML not stale | cache headers |
 | FastCGI/PHP only passes existing files; path info handled | `try_files` chain |
 
-## Docker
+## Docker (only when the project is containerised)
+
+Skip this block when the project runs as local processes — that is the default. Record it as `N/A (local processes)` rather than silently omitting it.
 
 | Check | Expected evidence |
 |---|---|
@@ -166,9 +168,9 @@ Map each case to `FR-n`. A requirement with no test is a finding, not a gap to m
 | Lint/format | `composer pint --test` / `npm run lint` | any diff |
 | Static analysis | `phpstan` / `tsc --noEmit` | any error at the configured level |
 | Tests | `php artisan test` / `vitest run` / `playwright test` | any failure |
-| Build | `npm run build` / `docker build` | build error |
+| Build | `npm run build` (client) / `docker build` if containerised | build error |
 | Dependency audit | `composer audit` / `npm audit --audit-level=high` | High or above |
-| Container scan | `trivy image` | fixable critical |
+| Container scan | `trivy image` — only if containerised | fixable critical |
 | Migration safety | dry run against a production-shaped copy | destructive change without an approved plan |
 
 State which of these already exist in the repo and which are recommendations. Do not claim a pipeline exists without seeing the config file.

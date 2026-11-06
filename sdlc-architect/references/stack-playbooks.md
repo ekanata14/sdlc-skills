@@ -55,7 +55,7 @@ Load this when designing (Phase 2) or auditing (Phase 4) against one of these st
 
 ## React
 
-**Architecture shape.** Feature folders, server state through a query layer, UI state local, one API wrapper that attaches auth and normalizes errors. Routing guards are UX; authorization is server-side.
+**Architecture shape.** Feature-based: `src/features/<feature>/` owns that feature's `components/`, `hooks/`, `api/`, `types/`, and tests; `src/components/` holds only shared primitives; `src/lib/` holds the query client and the single API wrapper. Server state goes through the query layer, UI state stays local. Routing guards are UX; authorization is server-side.
 
 **Honour.** Typed API responses, explicit loading/empty/error states per view, optimistic updates only where rollback is defined, keys from stable IDs, `useMemo` only with a measured need.
 
@@ -68,7 +68,7 @@ Load this when designing (Phase 2) or auditing (Phase 4) against one of these st
 
 ## Express
 
-**Architecture shape.** Router per resource, middleware chain of parse → validate → authorize → handler → error, one central error handler emitting the shared envelope. No business logic in the router file.
+**Architecture shape.** MVC, one layer per concern: `routes/` maps each URL to a controller method, `controllers/` handle request/response only, `services/` hold the business logic multiple entry points need, `models/` own the schema and persistence, `middleware/` carries parse → validate → authorize → error, and one central error handler emits the shared envelope. No business logic leaks into a router file or a controller body.
 
 **Honour.** `helmet`, explicit CORS allowlist, `express.json({ limit })`, validation middleware per route, async wrapper so rejections reach the error handler, rate limiters on auth and expensive endpoints, graceful shutdown.
 
@@ -78,6 +78,7 @@ Load this when designing (Phase 2) or auditing (Phase 4) against one of these st
 3. `cors()` with no origin list.
 4. Authorization decided inside the handler per route, so one route forgets.
 5. Unbounded `find()` responses with no pagination ceiling.
+6. A fat controller that talks to the ORM directly, so the same rule has to be re-implemented for the next endpoint or job.
 
 ## Nginx
 
@@ -93,6 +94,8 @@ Load this when designing (Phase 2) or auditing (Phase 4) against one of these st
 5. Static location ordering that shadows the front controller.
 
 ## Docker
+
+**Optional in this workflow.** Read this section only when the repo is already containerised or the user asked for containers. The default run path is local processes (`npm run dev`, native database) — never propose a compose file as the standard way to start a project.
 
 **Architecture shape.** Multi-stage build (deps → build → runtime), non-root runtime user, one process per container, config through env, healthcheck, volumes only for data that must survive.
 

@@ -8,6 +8,13 @@ If `docs/sdlc/<slug>/00-brief.md` exists, start from its §8 answer and confirm 
 
 Propose **one** stack. Evidence first, then a yes/no question. Never open with a menu of five options.
 
+**House default** — when the repo is empty or says nothing and the brief is silent, propose this and ask for a yes/no:
+
+- **API:** Express, laid out as MVC — `routes/` (URL → controller), `controllers/` (request/response only), `models/` (schema and persistence), `services/` (reusable business logic), `middleware/` (parse, validate, authorize, errors).
+- **Client:** React with a **feature-based architecture** — `src/features/<feature>/` owns that feature's `components/`, `hooks/`, `api/`, `types/`, and tests; `src/components/` holds only shared primitives.
+
+**Running the app** is local by default: `npm run dev` (nodemon or tsx for the API, Vite for the client), with the database running natively or as one service. Docker is an option, never the primary path — do not present a compose file as the way to start the project unless the user asks for containers or the repo is already containerised.
+
 | Repo evidence | Propose | Confirmation question |
 |---|---|---|
 | `composer.json` with `laravel/framework` + `livewire/livewire` | Laravel + Livewire + Tailwind | "Laravel 11 + Livewire 3 + Tailwind, MySQL/Postgres as per `.env.example`. Correct?" |
@@ -16,7 +23,7 @@ Propose **one** stack. Evidence first, then a yes/no question. Never open with a
 | `package.json` with `express` | Express + chosen view layer | Confirm persistence, auth strategy, and whether it is TypeScript |
 | `package.json` with `react` + `vite`/`next` | React (Vite or Next) + API | Confirm the API base and whether auth is token or cookie |
 | `docker-compose.yml` + `nginx/*.conf` | Existing topology — reuse it | "New service goes behind the existing nginx vhost. Right?" |
-| Nothing (empty repo) | Ask, one question | "Greenfield: Laravel+Livewire or SvelteKit+Express? What's the persistence layer?" |
+| Nothing (empty repo) | Express (MVC) + React (feature-based) as the house default | "Greenfield, so: Express MVC API + React feature-based client, run locally with `npm run dev`. Correct? What's the persistence layer?" |
 
 If the brief names a stack the repo contradicts, surface the conflict and ask which wins. Never resolve it yourself.
 

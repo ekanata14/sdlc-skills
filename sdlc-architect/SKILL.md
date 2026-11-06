@@ -24,6 +24,13 @@ These rules override your default helpfulness instinct. If a rule conflicts with
 10. **Comments are required here.** This workflow's inline-comment rule overrides any comment-light repo convention you have learned elsewhere.
 11. **Compose, do not duplicate.** Depth passes live in `references/security/` and `references/ui-ux/`. Read the relevant pack when Phase 4 calls for it instead of reinventing its checklist here.
 
+## House defaults
+
+Applied when neither the repo nor the brief says otherwise. Phase 1 still confirms them explicitly — a default is a proposed answer, not an assumption.
+
+- **Stack:** Express as the API in an MVC layout (`routes/` → `controllers/` → `services/` → `models/`, `middleware/` for cross-cutting concerns), React as the client in a feature-based layout (`src/features/<feature>/` owning its `components/`, `hooks/`, `api/`, `types/`).
+- **Run mode:** local processes — `npm run dev` for the API and the client, database native or as one service. Docker is an optional extra, never the primary path in setup steps, docs, or the brief.
+
 ## Triage the request first
 
 | Request shape | Path |
@@ -93,7 +100,7 @@ The brief is an input artifact, not a gate: no approval card, no document to rev
 Read `references/phase-1-requirements.md` before starting.
 
 1. **Analyze the brief** (or the request). Restate the goal in 1–2 sentences and name the actors. If the brief is a solution ("add a Livewire component") rather than a problem, restate the underlying problem.
-2. **Confirm the stack.** Propose exactly one stack with the repo evidence or brief that supports it, and ask for a yes/no. If the brief names a stack the repo contradicts, say so and ask which wins. If nothing is inferable, ask one direct question — never a five-option menu.
+2. **Confirm the stack.** Propose exactly one stack with the repo evidence or brief that supports it, and ask for a yes/no. If the brief names a stack the repo contradicts, say so and ask which wins. If nothing is inferable, propose the house default — Express (MVC) + React (feature-based), run locally — as a single yes/no question, never a five-option menu.
 3. **Clarify business logic.** Ask at most 4 numbered questions in one message, ordered by how much they change the design. Skip anything already answered. Prefer questions whose answer changes a table, a permission rule, or an API shape — not questions you could resolve with a sensible documented assumption.
 4. **Stop and wait.** If you asked questions, end the turn there. Do not write the requirements document against guessed answers.
 5. **Write `01-requirements.md`** from `assets/templates/01-requirements.md`. Requirements must be numbered and testable. Anything you resolved by judgement is labelled `Assumed:` so it can be challenged at the gate.
@@ -108,7 +115,7 @@ Read `references/phase-2-design.md` before starting.
 
 Produce these, in this order, then stop:
 
-1. **Architecture** — a Mermaid `flowchart` of components and a Mermaid `sequenceDiagram` of the primary flow. Include trust boundaries (browser / app / worker / database / third-party), what is synchronous vs queued, where uploads and secrets live, and the deployment topology (containers, reverse proxy, volumes).
+1. **Architecture** — a Mermaid `flowchart` of components and a Mermaid `sequenceDiagram` of the primary flow. Include trust boundaries (browser / app / worker / database / third-party), what is synchronous vs queued, where uploads and secrets live, and the runtime topology: local processes by default (API, client dev server or built assets, database, reverse proxy if any); containers and volumes only when the project is actually containerised.
 2. **Data flow** — DFD Level 0 (system as one process, external entities, data stores, labeled flows) and DFD Level 1 (processes decomposed, numbered, each with inputs and outputs). This is not the same diagram as the component flowchart.
 3. **Database schema** — a Mermaid `erDiagram` plus a field table per entity: type, nullability, default, constraints, index. Decide and state: primary-key strategy, timestamp columns, soft-delete policy, FK cascade behaviour, money representation, enum representation, tenancy, and the migration order with rollback notes.
 4. **API contracts** — one table per endpoint (method, path, authn, authorization rule, request, response, failure codes), a JSON request/response example for every endpoint that writes, the shared error envelope, pagination and filtering rules, and idempotency handling for money or state-machine transitions.
